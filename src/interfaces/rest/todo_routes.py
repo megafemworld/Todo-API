@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
 from src.domain.models import Todo
 from src.infrastructure.database import get_db
+from src.infrastructure.caching import cache
 
 bp = Blueprint('todos', __name__, url_prefix='/api/v1/todos')
 
-@bp.route('', method=['POST'])
+@bp.route('', methods=['POST'])
 def create_todo():
     data = request.get_json()
     if not data or 'content' not in data:
@@ -16,7 +17,8 @@ def create_todo():
     db.commit()
     return jsonify(new_todo.to_dict()), 201
 
-@bp.route('', method=['GET'])
+@bp.route('', methods=['GET'])
+@cache.cached(timeout=60, query_string=True)
 def get_todos():
     db = next(get_db())
     todos = db.query(Todo).all()
