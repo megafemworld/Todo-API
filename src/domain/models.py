@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from src.infrastructure.database import Base
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -7,6 +8,7 @@ class Todo(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String(200), nullable=False)
+    user = relationship("User", back_populates="todos")
     
     def to_dict(self):
         return {
@@ -19,6 +21,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(100), nullable=False)
     password = Column(String(100), nullable=False)
+    
+    todos = relationship("Todo", back_populates="user")
     
     def set_password(self, password):
         self.password = generate_password_hash(password)

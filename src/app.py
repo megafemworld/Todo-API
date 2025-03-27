@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from infrastructure.database import engine, Base
 from config.settings import settings
-from interfaces.rest import todo_routes
+from interfaces.rest import todo_routes, auth_routes
 
 def create_app():
     app = Flask(__name__)
@@ -13,6 +13,7 @@ def create_app():
     
     # Register routes
     app.register_blueprint(todo_routes.bp)
+    app.register_blueprint(auth_routes.auth_bp)
     
     return app
 
@@ -24,7 +25,7 @@ def handle_not_found(e):
 
 def register_error_handler(app):
     app.register_error_handler(400, handle_bad_request)
-    app.register_error_handler(400, handle_not_found)
+    app.register_error_handler(404, handle_not_found)
 
 if __name__ == "__main__":
     app = create_app()
