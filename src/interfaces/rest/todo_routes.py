@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from src.domain.models import Todo
+from domain.models import Todo
 from src.infrastructure.database import get_db
 from src.infrastructure.caching import cache
 

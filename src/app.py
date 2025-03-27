@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
-from src.infrastructure.database import engine, Base
-from src.config import settings
-from src.interfaces.rest import todo_routes
+from infrastructure.database import engine, Base
+from config.settings import settings
+from interfaces.rest import todo_routes
 
 def create_app():
     app = Flask(__name__)
